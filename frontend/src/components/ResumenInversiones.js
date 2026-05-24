@@ -14,7 +14,7 @@ function ResumenInversiones({ movimientos }) {
     <div className="resumen">
       <div className="tarjeta">
         <h3>Total Invertido</h3>
-        <p>{totalInvertido}</p>
+        <p>S/ {totalInvertido.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
       </div>
       <div className="tarjeta">
         <h3>Fondos Activos</h3>

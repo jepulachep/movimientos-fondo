@@ -127,3 +127,13 @@ tr:hover td {
   font-size: 12px;
   font-weight: bold;
 }
+
+.operacion-suscripcion {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.operacion-rescate {
+  color: #c62828;
+  font-weight: bold;
+}
