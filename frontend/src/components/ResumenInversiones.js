@@ -2,8 +2,16 @@ import React from 'react';
 
 function ResumenInversiones({ movimientos }) {
   // Solo se suman movimientos COMPLETADOS para visualizar el total invertido
-  const totalInvertido = movimientos.filter(m => m.estado === 'COMPLETADO').reduce((suma, m) => suma + m.monto, 0);
+ const saldoPEN = 
+  movimientos.filter(m => m.estado === 'COMPLETADO' && m.moneda === 'PEN' && m.tipoOperacion === 'SUSCRIPCION')
+    .reduce((suma, m) => suma + m.monto, 0)  -
+  movimientos.filter(m => m.estado === 'COMPLETADO' && m.moneda === 'PEN' && m.tipoOperacion === 'RESCATE')
+    .reduce((suma, m) => suma + m.monto, 0);
 
+const saldoUSD = 
+    movimientos.filter(m => m.estado === 'COMPLETADO' && m.moneda === 'USD' && m.tipoOperacion === 'SUSCRIPCION').reduce((suma, m) => suma + m.monto, 0) -
+    movimientos.filter(m => m.estado === 'COMPLETADO' && m.moneda === 'USD' && m.tipoOperacion === 'RESCATE').reduce((suma, m) => suma + m.monto, 0);
+  
   // Se usan fondos únicos para no contar el mismo fondo dos veces
   const fondosActivos = new Set(movimientos.map(m => m.fondo)).size;
 
@@ -13,9 +21,14 @@ function ResumenInversiones({ movimientos }) {
   return (
     <div className="resumen">
       <div className="tarjeta">
-        <h3>Total Invertido</h3>
-        <p>S/ {totalInvertido.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
-      </div>
+        <h3>Total Invertido PEN</h3>
+        <p>S/ {saldoPEN.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
+        </div>
+        <div className="tarjeta">
+        <h3>Total Invertido USD</h3>
+        <p>$ {saldoUSD.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
+        </div>
+
       <div className="tarjeta">
         <h3>Fondos Activos</h3>
         <p>{fondosActivos}</p>
