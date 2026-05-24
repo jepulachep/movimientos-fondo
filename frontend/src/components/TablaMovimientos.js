@@ -19,7 +19,12 @@ function TablaMovimientos({ movimientos }) {
             <td>{m.numeroOperacion}</td>
             <td>{m.fondo}</td>
             <td>{m.tipoOperacion}</td>
-            <td>{m.estado}</td>
+            <td>
+                <span className={
+                    m.estado === 'COMPLETADO' ? 'estado-completado' : m.estado === 'EN_PROCESO' ? 'estado-en-proceso' : 'estado-rechazado' }>
+                         {m.estado}
+                </span>
+            </td>
             <td>{m.moneda} {m.monto}</td>
             <td>{m.fecha}</td>
           </tr>
