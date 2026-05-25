@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# Movimientos de Fondos - Prueba Técnica Desarrollador Fullstack Junior 
+Sistema de visualización de movimientos de Fondos Mutuos para inversionistas.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Cómo correr el proyecto
 
-## Available Scripts
+### Backend (Spring Boot)
+Requisitos: 
+   > Java 17
+   > Maven
 
-In the project directory, you can run:
+```bash
+cd backend
+./mvnw spring-boot:run
+```
+El servidor arranca en http://localhost:8080
+Endpoint disponible: GET http://localhost:8080/api/movimientos
 
-### `npm start`
+### Frontend (React)
+Requisitos: Node.js
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+cd frontend
+npm install
+npm start
+```
+La aplicación abre en http://localhost:3000
+> Es importante que el backend corra antes de iniciar el frontend.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Supuestos tomados
 
-### `npm test`
+Campos del movimiento: El enunciado especificaba los campos, así que tuve que hacer una breve busqueda de los requerimientos básicos. Decidí incluir id, numeroOperacion, fondo, tipoOperacion, estado, monto, moneda y fecha porque representan la información mínima que un inversionista necesita para entender cada movimiento hecho de sus inversiones.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Tipos de operación: He verificado que existen dos — SUSCRIPCION (ingreso de dinero al fondo) y RESCATE (retiro de dinero). Son los únicos movimientos posibles en fondos mutuos.
 
-### `npm run build`
+Estados: COMPLETADO, EN_PROCESO y RECHAZADO. Estos representan el ciclo de vida completo de una operación.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Moneda: Se agregó el campo moneda (PEN/USD) porque son los más comunes en fondo mutuos en Perú y el inversionista necesita distinguirlas.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Número de operación: Se agregó para que el inversionista pueda hacer seguimiento o consultar una operación específica con su asesor.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Datos en memoria: Los datos son simulados en memoria. En producción se conectaría a una base de datos relacional como PostgreSQL con JPA/Hibernate.
 
-### `npm run eject`
+## Decisiones técnicas
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Backend:
+- Spring Boot 3.5.14 por estabilidad y abundante documentación disponible para consultas.
+- Maven por su adopción en entornos financieros Java empresariales, es la más común.
+- Java 17 LTS por ser la versión con mayor soporte y documentación activa.
+- Arquitectura en capas (controller, service, model) para separar responsabilidades y mejor organización.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Frontend:
+- React con create-react-app por simplicidad y velocidad de setup. 
+- Componentes separados por responsabilidad: ResumenInversiones y TablaMovimientos. 
+- CSS propio basado en el design system Precision Capital para mantener un estilo financiero profesional.
+- Fuente Inter por su legibilidad en contextos de datos financieros y mejor estilo.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Saldo por fondo: Se calculó restando rescates completados a suscripciones completadas, agrupado por fondo. Las operaciones EN_PROCESO no se incluyen porque aún no se han ejecutado.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Qué no terminé y cómo lo habría resuelto
 
-## Learn More
+Base de datos: No conecté una base de datos real. Lo habría resuelto con PostgreSQL usando Spring Data JPA, definiendo Movimiento como entidad con @Entity y usando un MovimientoRepository que extienda JpaRepository.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Autenticación: No hay login. En producción usaría Spring Security con JWT para que cada inversionista vea solo sus propios movimientos.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Filtros: No lo implementé porque en la guía indica explícitamente que no se consideran en esta etapa del MVP. De haberlo necesitado, lo habría resuelto como query params en el endpoint: GET /api/movimientos?estado=COMPLETADO&desde=2026-01-01
 
-### Code Splitting
+Tests: No escribí tests unitarios. Habría testeado la lógica del service con JUnit 5 y Mockito en el backend, y con React Testing Library en el frontend.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Frontend: Lo habría desarrollado con mayor detalle, agregando gráficos de evolución del saldo, íconos en las tarjetas, filtros por fecha, moneda y estado, y una ventana modal con el detalle completo de cada operación al hacer clic en una fila.
