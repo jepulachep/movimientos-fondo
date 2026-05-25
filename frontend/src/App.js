@@ -27,8 +27,10 @@ function App() {
   return (
     <div className="app">
       <h1>Mis Inversiones</h1>
+      <p className="subtitulo">Resumen general y estado de sus activos financieros.</p>
       <ResumenInversiones movimientos={movimientos} />
       <TablaMovimientos movimientos={movimientos} />
+      
     </div>
   );
 }

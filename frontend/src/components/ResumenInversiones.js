@@ -30,32 +30,36 @@ const saldoUSD =
   return { fondo, moneda, saldo: suscripciones - rescates };
 });
   return (
-    <div className="resumen">
-      <div className="tarjeta">
-        <h3>Saldo Inversiones PEN</h3>
-        <p>S/ {saldoPEN.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
+    <div>
+      <div className="resumen">
+        <div className="tarjeta">
+          <h3>Saldo PEN</h3>
+          <p>S/ {saldoPEN.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
         </div>
         <div className="tarjeta">
-        <h3>Saldo Inversiones USD</h3>
-        <p>$ {saldoUSD.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
+          <h3>Saldo USD</h3>
+          <p>$ {saldoUSD.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
         </div>
-
-      <div className="tarjeta">
-        <h3>Fondos Activos</h3>
-        <p>{fondosActivos}</p>
+        <div className="tarjeta">
+          <h3>Fondos Activos</h3>
+          <p>{fondosActivos}</p>
+        </div>
+        <div className="tarjeta">
+          <h3>En Proceso</h3>
+          <p>{enProceso}</p>
+        </div>
       </div>
-      <div className="tarjeta">
-        <h3>En Proceso</h3>
-        <p>{enProceso}</p>
-      </div>
-      <div className="tarjeta">
+      <div className="tarjeta saldo-fondos-row">
         <h3>Saldo por Fondo</h3>
-        {saldoFondos.map(f => (
+        <div className="saldo-fondos-horizontal">
+          {saldoFondos.map(f => (
             <p key={f.fondo} className="saldo-fondo-item">
-            {f.fondo}: {f.moneda === 'PEN' ? 'S/' : '$'} {f.saldo.toLocaleString('es-PE', { minimumFractionDigits: 2 })}
+              <span className="fondo-nombre">{f.fondo.replace(' PEN', '').replace(' USD', '')}</span>
+              <span className="fondo-monto">{f.moneda === 'PEN' ? 'S/' : '$'} {f.saldo.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</span>
             </p>
-        ))}
+          ))}
         </div>
+      </div>
     </div>
   );
 }
